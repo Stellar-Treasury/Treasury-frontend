@@ -18,7 +18,7 @@ import { WalletButton }        from '@/components/wallet/WalletButton';
 import { TreasuryPanel }       from '@/components/treasury/TreasuryPanel';
 import { ProposalList }        from '@/components/proposals/ProposalList';
 import { CreateProposalForm }  from '@/components/proposals/CreateProposalForm';
-import { Button }              from '@/components/ui';
+import { Button, SlideOver }   from '@/components/ui';
 
 import {
   MOCK_BALANCE, MOCK_SIGNERS, MOCK_CONFIG,
@@ -208,27 +208,14 @@ export default function DashboardPage() {
       </footer>
 
       {/* ── Create proposal slide-over ───────────────────────────────────── */}
-      {showForm && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-void/70 backdrop-blur-sm z-50"
-            onClick={() => setShowForm(false)}
-          />
-          {/* Panel */}
-          <div className={clsx(
-            'fixed right-0 top-0 h-full w-full max-w-md bg-panel border-l border-border z-50',
-            'flex flex-col animate-slide-in-right',
-          )}>
-            <CreateProposalForm
-              proposerAddress={wallet.address!}
-              onSubmit={handleCreate}
-              onClose={() => setShowForm(false)}
-              submitting={submitting}
-            />
-          </div>
-        </>
-      )}
+      <SlideOver open={showForm} onClose={() => setShowForm(false)}>
+        <CreateProposalForm
+          proposerAddress={wallet.address!}
+          onSubmit={handleCreate}
+          onClose={() => setShowForm(false)}
+          submitting={submitting}
+        />
+      </SlideOver>
     </div>
   );
 }
