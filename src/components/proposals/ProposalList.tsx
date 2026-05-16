@@ -1,7 +1,7 @@
 'use client';
 // components/proposals/ProposalList.tsx
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { FileText } from 'lucide-react';
 import { clsx } from 'clsx';
 import { Proposal, ProposalStatus } from '@/types';
@@ -26,14 +26,18 @@ export function ProposalList({
 }: ProposalListProps) {
   const [filter, setFilter] = useState<Filter>('All');
 
-  const counts = FILTERS.reduce((acc, f) => {
+  const counts = useMemo(() => FILTERS.reduce((acc, f) => {
     acc[f] = f === 'All' ? proposals.length : proposals.filter(p => p.status === f).length;
     return acc;
-  }, {} as Record<Filter, number>);
+  }, {} as Record<Filter, number>), [proposals]);
 
-  const visible = filter === 'All'
-    ? proposals
-    : proposals.filter(p => p.status === filter);
+  const visible = useMemo(() => {
+    const filtered = filter === 'All'
+      ? proposals
+      : proposals.filter(p => p.status === filter);
+
+    return [...filtered].sort((a, b) => b.createdAt - a.createdAt);
+  }, [filter, proposals]);
 
   return (
     <div className="flex flex-col gap-4">
