@@ -1,6 +1,6 @@
 # DAO Treasury Dashboard — Frontend
 
-> A production-ready Next.js dashboard for interacting with the Stellar Soroban DAO multisig treasury contract. Connect a Freighter wallet, view the treasury balance, create proposals, and approve them on-chain.
+> A production-ready Next.js dashboard for interacting with the Stellar Soroban DAO multisig treasury contract. Connect a Freighter wallet, view treasury balances, create proposals, approve pending proposals, and track signer approvals.
 
 ---
 
@@ -49,6 +49,8 @@ The dashboard provides a real-time interface for DAO members to manage treasury 
 | Approve proposal | ✅ |
 | Cancel proposal | ✅ |
 | Filter proposals by status | ✅ |
+| Proposal drawer with escape and backdrop close | ✅ |
+| Wallet connection error state | ✅ |
 | Approval progress bar | ✅ |
 | Responsive layout | ✅ |
 | Loading + submitting states | ✅ |

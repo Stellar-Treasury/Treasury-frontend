@@ -2,7 +2,7 @@
 // components/wallet/WalletButton.tsx
 // feat(wallet): integrate wallet connection
 
-import { Wallet, LogOut, ChevronDown, CheckCircle2 } from 'lucide-react';
+import { Wallet, LogOut, ChevronDown, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { clsx } from 'clsx';
 import { Button, Spinner } from '@/components/ui';
@@ -28,7 +28,21 @@ export function WalletButton({ wallet, onConnect, onDisconnect }: WalletButtonPr
   }
 
   if (!wallet.connected) {
-    return (
+    return wallet.error ? (
+      <div className="max-w-[18rem] rounded-xl border border-rose/20 bg-rose/5 p-3 text-xs font-mono text-rose">
+        <div className="flex items-start gap-2 mb-3">
+          <AlertTriangle className="w-4 h-4 shrink-0" />
+          <div>
+            <p className="font-semibold">Wallet connection failed</p>
+            <p className="text-rose/80 mt-1">{wallet.error}</p>
+          </div>
+        </div>
+        <Button variant="primary" size="sm" onClick={onConnect} className="w-full gap-2">
+          <Wallet className="w-3.5 h-3.5" />
+          RETRY CONNECT
+        </Button>
+      </div>
+    ) : (
       <Button variant="primary" size="sm" onClick={onConnect} className="gap-2">
         <Wallet className="w-3.5 h-3.5" />
         CONNECT WALLET

@@ -213,3 +213,5 @@ export function EmptyState({ title, description }: { title: string; description?
     </div>
   );
 }
+
+export { SlideOver } from './SlideOver';

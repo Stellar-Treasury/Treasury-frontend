@@ -23,21 +23,31 @@ export function useWallet() {
   const connect = useCallback(async () => {
     setWallet(w => ({ ...w, connecting: true, error: null }));
 
-    // Simulate async wallet handshake (replace with Freighter SDK call)
-    await new Promise(res => setTimeout(res, 1200));
+    try {
+      // Simulate async wallet handshake (replace with Freighter SDK call)
+      await new Promise(res => setTimeout(res, 1200));
 
-    // In production:
-    //   const isAllowed = await freighter.isAllowed();
-    //   if (!isAllowed) await freighter.setAllowed();
-    //   const { publicKey } = await freighter.getAddress();
+      // In production:
+      //   const isAllowed = await freighter.isAllowed();
+      //   if (!isAllowed) await freighter.setAllowed();
+      //   const { publicKey } = await freighter.getAddress();
 
-    setWallet({
-      connected:  true,
-      address:    DEMO_ADDRESS,
-      publicKey:  DEMO_ADDRESS,
-      connecting: false,
-      error:      null,
-    });
+      setWallet({
+        connected:  true,
+        address:    DEMO_ADDRESS,
+        publicKey:  DEMO_ADDRESS,
+        connecting: false,
+        error:      null,
+      });
+    } catch (error) {
+      setWallet({
+        connected:  false,
+        address:    null,
+        publicKey:  null,
+        connecting: false,
+        error:      error instanceof Error ? error.message : 'Unable to connect wallet',
+      });
+    }
   }, []);
 
   const disconnect = useCallback(() => {
