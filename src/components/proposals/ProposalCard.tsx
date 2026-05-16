@@ -5,6 +5,7 @@ import { UserPlus, UserMinus, ArrowUpRight, CheckCheck, X, Clock } from 'lucide-
 import { Proposal } from '@/types';
 import { Card, StatusBadge, Button, Divider } from '@/components/ui';
 import { shortAddress, timeSince } from '@/lib/mock-data';
+import { getProposalKindLabel, getProposalPayloadLabel, getProposalTypeAccent } from '@/lib/proposal-utils';
 import { clsx } from 'clsx';
 
 interface ProposalCardProps {
@@ -22,12 +23,6 @@ const KIND_ICONS = {
   RemoveSigner: <UserMinus className="w-3.5 h-3.5" />,
 };
 
-const KIND_LABELS = {
-  Transfer:     'TRANSFER',
-  AddSigner:    'ADD SIGNER',
-  RemoveSigner: 'REMOVE SIGNER',
-};
-
 export function ProposalCard({
   proposal, connectedAddress, onApprove, onCancel, submitting, isSigner
 }: ProposalCardProps) {
@@ -38,8 +33,10 @@ export function ProposalCard({
   const progress = Math.min(100, (proposal.approvals.length / proposal.threshold) * 100);
   const canAct   = isSigner && proposal.status === 'Pending' && !hasApproved;
 
-  const kindIcon  = KIND_ICONS[proposal.kind.type];
-  const kindLabel = KIND_LABELS[proposal.kind.type];
+  const kindIcon      = KIND_ICONS[proposal.kind.type];
+  const kindLabel     = getProposalKindLabel(proposal.kind).toUpperCase();
+  const payloadLabel  = getProposalPayloadLabel(proposal.kind).toUpperCase();
+  const payloadAccent = getProposalTypeAccent(proposal.kind);
 
   return (
     <Card
@@ -74,15 +71,15 @@ export function ProposalCard({
       <div className="bg-surface border border-border/60 p-3 mb-3 font-mono text-xs space-y-1">
         {proposal.kind.type === 'Transfer' && (
           <>
-            <Row label="TO"     value={shortAddress(proposal.kind.recipient)} />
+            <Row label={payloadLabel} value={shortAddress(proposal.kind.recipient)} />
             <Row label="AMOUNT" value={`${proposal.kind.amount.toLocaleString()} XLM`} accent="cyan" />
           </>
         )}
         {(proposal.kind.type === 'AddSigner' || proposal.kind.type === 'RemoveSigner') && (
           <Row
-            label={proposal.kind.type === 'AddSigner' ? 'ADD' : 'REMOVE'}
+            label={payloadLabel}
             value={shortAddress(proposal.kind.signer)}
-            accent={proposal.kind.type === 'AddSigner' ? 'teal' : 'rose'}
+            accent={payloadAccent}
           />
         )}
         <Row label="PROPOSER" value={shortAddress(proposal.proposer)} />
